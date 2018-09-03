@@ -1,0 +1,73 @@
+#include<iostream>
+#include<fstream>
+#include<iomanip>
+#include<stdlib.h>
+using namespace std;
+bool Check(int rowCurrent,int *&NQueen);                         //to check whether the position is safe for the queen
+void Print(ofstream &os,int n,int *&NQueen);                                  //print the outcome
+void Solve(int rowCurrent,int *&NQueen,int n,int &count, ofstream &os);           //Solves the n-Queens problem by recursive
+
+//
+bool Check(int rowCurrent,int *&NQueen)
+{
+    int i = 0;
+    while(i < rowCurrent)
+    {
+        if(NQueen[i] == NQueen[rowCurrent] || (abs(NQueen[i]-NQueen[rowCurrent]) == abs(i-rowCurrent)) )
+        {
+            return false;
+        }
+        i++;
+    }
+    return true;
+}
+//print all possible outcomes
+void Print(ofstream &os,int n,int *&NQueen)
+{
+    for (int i = 0;i < n;i++) {
+        for(int j = 0 ; j < n; j++)
+        {
+            cout<<(NQueen[i]==j?1:0);
+            cout<<setw(2);
+        }
+        cout<<"\n";
+   }
+    cout<<"\n";
+}
+//using recursive to find solutions, when it find an answer, then print it
+void Solve(int rowCurrent,int *&NQueen,int n,int &count, ofstream &os)
+{
+    if(rowCurrent == n)  //when all the rows are solved, print the outcome
+    {
+		count++;
+		Print(os,n,NQueen);
+		}
+    for(int i = 0;  i < n; i++)
+    {
+        NQueen[rowCurrent] = i;              
+        if(Check(rowCurrent,NQueen))
+        {
+            Solve(rowCurrent+1,NQueen,n,count,os);  //solve the next row
+        }
+
+    }
+}
+int main()
+{
+    int n;           //how many queens
+    int count = 0;   //to count how many solutions can be found
+    cout<<"Enter how many queens in your problem"<<endl;
+    cin>>n;
+    if(n<4)
+    {
+        cerr<<"the number of queens has to be larger than 4"<<endl;
+        return 0;
+    }
+    int *NQueen = new int[n];
+    ofstream os;
+    os.open("result.txt");
+    Solve(0,NQueen,n,count,os);
+    cout<<"there are "<<count<<"solutions"<<endl;
+    os.close();
+    return 0;
+}
