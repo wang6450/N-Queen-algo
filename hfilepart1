@@ -1,0 +1,111 @@
+//  hint.h
+//  N Queens Problem
+//
+//  Created by Ramavarapu Sreenivas on 8/23/16.
+//
+//
+#ifndef N_queens
+#define N_queens
+#include<iostream>
+using namespace std;
+
+class Board
+{
+	// private data member: size of the board
+	int size;
+	 int **chess_board;
+	// private member function:  returns 'false' if
+	// the (row, col) position is not safe.
+	bool is_this_position_safe(int row, int col)//check whether two queens on the same line
+	{
+		//Check each row on left side
+		{for (int j = 0; j < col; j++)
+			if (chess_board[row][j])
+				return false;
+		//Check upper diagonal
+		for (int i = row, j = col; i >= 0 && j >= 0; i--, j--)
+			if (chess_board[i][j])
+				return false;
+		//Check another diagonal
+		for (int i = row, j = col; j >= 0 && i < size; i++, j--)
+			if (chess_board[i][j])
+				return false; 
+		}
+		return true;
+	}
+
+	// private member function: initializes the (n x n) chessboard
+	// pointer-to-pointer initialization of the board
+	void initialize(int n)
+	{
+		size = n;
+		chess_board = new int*[size];
+		for (int i = 0; i < size; i++)
+			chess_board[i] = new int[size];
+		// write the appropriate code that uses the pointer-to-pointer
+		// method to initialize the (n x n) chessboard.  Once initialized,
+		for (int i = 0; i < size; i++)
+			for (int j = 0; j < size; j++)
+				chess_board[i][j] = 0;
+		// put zeros in all entries.  Later on, if you placed a queen in
+		// the (i,j)-th position, then chessboard[i][j] will be 1.
+}
+	// private member function: prints the board position
+	void print_board()
+	{
+		cout << size << "-Queens Problem Solution" << endl;
+		{
+			for (int i = 0; i < size; i++)
+			{
+				for (int j = 0; j < size; j++)
+					cout << chess_board[i][j] << "  ";
+				cout << endl;
+			}
+		}
+		// write the appropriate code here to print out the solved
+		// board as shown in the assignment description
+	}
+	// private member function: recursive backtracking
+	bool solve(int col)
+	{
+		int row=0;
+		
+			if (col > size-1)
+			{
+				return true;
+				cout << "You have solved the puzzle.";
+				print_board();
+			}
+			else
+			{
+
+				for (; row <= size-1; row++)
+				{
+					if (is_this_position_safe(row, col)) //check the position, if safe put the queen here
+					{
+						chess_board[row][col] = 1; //the col-th queen is at chess_board[i][j]
+						//cout << row << col << endl;
+						if (solve(col + 1))// move to the next column
+							return true;
+					}
+				}
+			}
+			
+		return false;
+	}
+
+		// implement the recursive backtracking procedure described in
+		// pseudocode format in figure 1 of the description of the first
+		// programming assignment
+public:
+	// Solves the n-Queens problem by (recursive) backtracking
+	void nQueens(int n)
+	{
+		initialize(n);   //initialize the chess_board
+		if (solve(0))    
+		print_board();
+		else
+			cout << "There is no solution to the " << n << "-Queens Problem" << endl;
+	}
+};
+#endif
