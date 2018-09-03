@@ -1,0 +1,16 @@
+// N Queens Problem via (Backtracking, which is implemented by) Recursion 
+
+#include <iostream>
+#include "part1_N_queens.h"
+using namespace std;
+int main (int argc, char * const argv[]) 
+{
+    Board x;
+    
+    int board_size;
+    cout<<"please enter the size"<<endl;
+	cin>>board_size;
+	x.nQueens(board_size);
+	
+    return 0;
+}
